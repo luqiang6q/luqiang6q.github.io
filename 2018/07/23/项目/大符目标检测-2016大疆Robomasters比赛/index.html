@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>大符目标检测-2016大疆Robomasters比赛 | lxqiang</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="项目" />
+    
+    <meta name="description" content="概述这是2016年大疆RoboMaster机器人竞赛的一个题目，当时在系里面的RoboMaster竞赛队伍中接触到的。 任务要求：  实时检测出视频中的所有九个区域，用矩形框将格子区域框出； 实时检测出视频中大符的目标区域和非目标区域，目标区域即为姿态形状一直发生变化的小人儿所在的格子区域，小人儿所在的格子每隔1.5秒换一次，所以检测速度尽量要快；  我的思路当然，可以用运动检测、运动跟踪的论文方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大符目标检测-2016大疆Robomasters比赛">
+<meta property="og:url" content="http://example.com/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/index.html">
+<meta property="og:site_name" content="lxqiang">
+<meta property="og:description" content="概述这是2016年大疆RoboMaster机器人竞赛的一个题目，当时在系里面的RoboMaster竞赛队伍中接触到的。 任务要求：  实时检测出视频中的所有九个区域，用矩形框将格子区域框出； 实时检测出视频中大符的目标区域和非目标区域，目标区域即为姿态形状一直发生变化的小人儿所在的格子区域，小人儿所在的格子每隔1.5秒换一次，所以检测速度尽量要快；  我的思路当然，可以用运动检测、运动跟踪的论文方">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu996rbjw5j20hv0e9qak.jpg">
+<meta property="article:published_time" content="2018-07-23T06:42:20.000Z">
+<meta property="article:modified_time" content="2018-08-14T14:56:32.000Z">
+<meta property="article:author" content="陆强">
+<meta property="article:tag" content="项目">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu996rbjw5j20hv0e9qak.jpg">
+    
+
+    
+        <link rel="alternate" href="http://bbs.ustc.edu.cn/cgi/bbsdoc?board=Intern" title="lxqiang" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?9f4b9fda51086978761e0128dc7f4992";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/C/">C++</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/CNN/">CNN</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Github/">Github</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/OpenCV/">OpenCV</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Python/">Python</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/TensorFlow/">TensorFlow</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/">模型优化</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
+                                    
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-项目/大符目标检测-2016大疆Robomasters比赛" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        大符目标检测-2016大疆Robomasters比赛
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/" class="article-date">
+            <time datetime="2018-07-23T06:42:20.000Z" itemprop="datePublished">2018-07-23</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>这是2016年大疆RoboMaster机器人竞赛的一个题目，当时在系里面的RoboMaster竞赛队伍中接触到的。</p>
+<p>任务要求：</p>
+<ul>
+<li>实时检测出视频中的所有九个区域，用矩形框将格子区域框出；</li>
+<li>实时检测出视频中大符的目标区域和非目标区域，目标区域即为姿态形状一直发生变化的小人儿所在的格子区域，小人儿所在的格子每隔1.5秒换一次，所以检测速度尽量要快；</li>
+</ul>
+<h2 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h2><p>当然，可以用运动检测、运动跟踪的论文方法来尝试，不过速度上可能不一定达到要求。所以我就想着能否用图像预处理的一些基本算法结合目标的变化特性来检测。</p>
+<p>根据视频素材，对图片做了一些预处理，发现小人儿虽然一直在变化，但是其矩形长宽比基本都是最大的那个（在排除噪声的情况下），所以可以利用这一点来进行对目标区域的检测。</p>
+<p>我的算法如下：</p>
+<p><img src="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu98yjveroj20bp07ndga.jpg"></p>
+<h2 id="中间结果"><a href="#中间结果" class="headerlink" title="中间结果"></a>中间结果</h2><p>hsv处理之后的中间结果图：</p>
+<p><img src="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu992n0ppjj20hv0e974e.jpg"></p>
+<p>腐蚀膨胀之后的中间结果图：<br><img src="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu993kqnk2j20hv0e9t8q.jpg"></p>
+<p>最终检测结果图：<br><img src="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9946rqhyj20hv0e9n4x.jpg"></p>
+<p>其他情况下的检测结果：<br><img src="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9964vdt1j20hv0e945q.jpg"></p>
+<p><img src="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu996rbjw5j20hv0e9qak.jpg"></p>
+<h2 id="视频检测结果"><a href="#视频检测结果" class="headerlink" title="视频检测结果"></a>视频检测结果</h2><p>i5上速度达到55-60帧，tk1上没测过，实时性很好，而且检测也很准确，没有出现误检情况。</p>
+<p>见链接：<a target="_blank" rel="noopener" href="https://v.youku.com/v_show/id_XMzc4MDA0NDM2NA==.html?spm=a2hzp.8253869.0.0">https://v.youku.com/v_show/id_XMzc4MDA0NDM2NA==.html?spm=a2hzp.8253869.0.0</a></p>
+<h2 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;opencv2/imgproc/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">VideoCapture <span class="title">capture</span><span class="params">(<span class="string">&quot;video.mp4&quot;</span>)</span></span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">	&#123; </span><br><span class="line">        <span class="keyword">clock_t</span> start,finish;</span><br><span class="line">        <span class="keyword">double</span> totaltime;</span><br><span class="line">        start=clock();</span><br><span class="line">        </span><br><span class="line">        Mat frame,img_hsv,img_hsv2;<span class="comment">//定义一个Mat变量，用于存储每一帧的图像</span></span><br><span class="line">        capture &gt;&gt; frame;  <span class="comment">//读取当前帧</span></span><br><span class="line">        <span class="keyword">if</span>(frame.empty()) <span class="keyword">continue</span>;</span><br><span class="line">        </span><br><span class="line">        imshow(<span class="string">&quot;原图&quot;</span>,frame);</span><br><span class="line">        cvtColor(frame,img_hsv,CV_BGR2HSV);</span><br><span class="line">        Scalar lowerb = Scalar(<span class="number">105</span>, <span class="number">43</span>, <span class="number">176</span>);</span><br><span class="line">        Scalar upperb = Scalar(<span class="number">113</span>, <span class="number">255</span>, <span class="number">255</span>);</span><br><span class="line">        inRange(img_hsv, lowerb, upperb, img_hsv2);</span><br><span class="line">        imshow(<span class="string">&quot;img_hsv2&quot;</span>,img_hsv2);</span><br><span class="line">        </span><br><span class="line">        Mat element=getStructuringElement(MORPH_RECT,Size(<span class="number">11</span>,<span class="number">11</span>));</span><br><span class="line">        morphologyEx(img_hsv2,img_hsv2,MORPH_ERODE,element);</span><br><span class="line">        Mat element2=getStructuringElement(MORPH_RECT,Size(<span class="number">16</span>,<span class="number">17</span>));</span><br><span class="line">        morphologyEx(img_hsv2,img_hsv2,MORPH_DILATE,element2);<span class="comment">//直接膨胀，九宫格中的图案会没了。所以先腐蚀再膨胀</span></span><br><span class="line">        imshow(<span class="string">&quot;腐蚀膨胀&quot;</span>,img_hsv2);</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;Point&gt;&gt; contours;<span class="comment">//定义轮廓的点集</span></span><br><span class="line">        <span class="built_in">vector</span>&lt;Vec4i&gt; hierarchy;</span><br><span class="line">        findContours(img_hsv2,contours,hierarchy,CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE);</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;Rect&gt; <span class="title">boundRect</span><span class="params">(contours.size())</span></span>;  <span class="comment">//定义包围点集的最小矩形vector  要加上(contours.size())，不然会超出vector范围</span></span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">0</span>;<span class="keyword">float</span> b=<span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//Mat drawing = Mat::zeros( frame.size(), CV_8UC3 );//创建空白的Mat图像(算法调试用)</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;contours.size();i++)   </span><br><span class="line">        	<span class="comment">//此处定义为unsigned int i=0 若只定义为int i=0，编译时会出现 warning C4018 “&lt;” 有符号/无符号不匹配。contours是一个Vector容器，contours.size()在容器中被定义为: unsigned int 类型</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(hierarchy[i][<span class="number">3</span>]!=<span class="number">-1</span>)<span class="comment">//提取内轮廓</span></span><br><span class="line">            &#123;  </span><br><span class="line">                boundRect[i] = boundingRect( Mat(contours[i]) );   <span class="comment">//计算目标图案的小矩形数组 </span></span><br><span class="line">                <span class="keyword">if</span>( (<span class="keyword">float</span>)boundRect[i].height/boundRect[i].width&gt;<span class="number">1</span> )	  <span class="comment">//也可以用长宽比限制(float)boundRect[i].width/boundRect[i].height&gt;1.2 &amp;&amp; (float)boundRect[i].width/boundRect[i].height&lt;1.6</span></span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">if</span>((<span class="keyword">float</span>)boundRect[i].height/boundRect[i].width&gt;b)</span><br><span class="line">                    &#123;  </span><br><span class="line">                        b=(<span class="keyword">float</span>)boundRect[i].height/boundRect[i].width; a=i; &#125;<span class="comment">//（视频倾斜时的影响）当有多个宽比长高的矩形时，利用目标对象的宽长比最大来筛选</span></span><br><span class="line">                    &#125;	</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// rectangle( frame, boundRect[a].tl(), boundRect[a].br(), Scalar(0,0,255) ,4);//画出目标图案的小矩形框，tl矩形左上角top left，br右下角（两个参数为对角线上的点）</span></span><br><span class="line">	   </span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;Rect&gt; <span class="title">boundRect2</span><span class="params">(contours.size())</span></span>;  <span class="comment">//用于定位和画九宫格的矩形数组</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span> i=<span class="number">0</span>; i&lt;contours.size();i++)   </span><br><span class="line">        &#123;</span><br><span class="line">            boundRect2[i] = boundingRect( Mat(contours[i]) );</span><br><span class="line">            <span class="keyword">if</span>(boundRect2[i].height&gt;<span class="number">30</span>)</span><br><span class="line">                <span class="keyword">if</span>( boundRect[a].x &gt; boundRect2[i].x &amp;&amp; boundRect[a].x &lt; (boundRect2[i].x+boundRect2[i].width) &amp;&amp; boundRect[a].y &gt; boundRect2[i].y &amp;&amp; boundRect[a].y &lt; (boundRect2[i].y+boundRect2[i].height ))</span><br><span class="line">                    rectangle( frame, boundRect2[i].tl(), boundRect2[i].br(), Scalar(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>),<span class="number">4</span> );</span><br><span class="line">        &#125;</span><br><span class="line">        imshow(<span class="string">&quot;输出&quot;</span>,frame);</span><br><span class="line">        </span><br><span class="line">        finish=clock();</span><br><span class="line">        totaltime=(<span class="keyword">double</span>)(finish-start)/CLOCKS_PER_SEC;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;帧率&quot;</span>&lt;&lt;<span class="number">1</span>/totaltime&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        waitKey(<span class="number">1</span>);</span><br><span class="line">        	<span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;************************************************************&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">cin</span>.get();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+</article>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/luqiang6q" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="https://weibo.com/6Qiang/profile?rightmod=1&wvr=6&mod=personinfo" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="http://bbs.ustc.edu.cn/cgi/bbsdoc?board=Intern" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/07/24/%E9%A1%B9%E7%9B%AE/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E9%97%A8%E7%89%8C%E5%8F%B7%E8%AF%86%E5%88%AB/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            实验室门牌号识别
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/07/18/TensorFlow/%E5%90%84%E5%AE%9E%E9%AA%8C%E6%A8%A1%E5%9E%8B%EF%BC%8D%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%813/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">笔尖检测-实验模型关键代码</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+<div class="widget-wrap widget-list">
+    <h3 class="widget-title">目录</h3>
+    <div class="widget">
+        <div id="toc" class="toc-article">
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">我的思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E7%BB%93%E6%9E%9C"><span class="toc-number">3.</span> <span class="toc-text">中间结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E6%A3%80%E6%B5%8B%E7%BB%93%E6%9E%9C"><span class="toc-number">4.</span> <span class="toc-text">视频检测结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">源代码</span></a></li></ol>
+        </div>
+    </div>
+</div>
+
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8E%E7%AC%94%E5%B0%96%E6%A3%80%E6%B5%8B%E7%9A%84%E6%89%8B%E5%86%99%E6%A8%A1%E4%BB%BF%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9e25fxhgj20hs0dcwlp.jpg)" alt="基于笔尖检测的手写模仿机器人" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8E%E7%AC%94%E5%B0%96%E6%A3%80%E6%B5%8B%E7%9A%84%E6%89%8B%E5%86%99%E6%A8%A1%E4%BB%BF%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="title">基于笔尖检测的手写模仿机器人</a></p>
+                            <p class="item-date"><time datetime="2018-07-26T11:48:32.000Z" itemprop="datePublished">2018-07-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EGRNN%E5%92%8CGBDT%E7%9A%84%E5%A7%BF%E6%80%81%E8%AF%AF%E5%B7%AE%E8%A1%A5%E5%81%BF/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ws4.sinaimg.cn/large/b41e0ba9ly1fuise6vwjgj20bc06ewj5.jpg)" alt="基于GRNN和GBDT的姿态误差补偿" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EGRNN%E5%92%8CGBDT%E7%9A%84%E5%A7%BF%E6%80%81%E8%AF%AF%E5%B7%AE%E8%A1%A5%E5%81%BF/" class="title">基于GRNN和GBDT的姿态误差补偿</a></p>
+                            <p class="item-date"><time datetime="2018-07-26T01:48:32.000Z" itemprop="datePublished">2018-07-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/25/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ws3.sinaimg.cn/large/b41e0ba9ly1fu9bfbd720j20i90d70u7.jpg)" alt="验证码识别" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/25/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB/" class="title">验证码识别</a></p>
+                            <p class="item-date"><time datetime="2018-07-25T10:23:46.000Z" itemprop="datePublished">2018-07-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/24/%E9%A1%B9%E7%9B%AE/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E9%97%A8%E7%89%8C%E5%8F%B7%E8%AF%86%E5%88%AB/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9a1gwko4j20dw0af44l.jpg)" alt="实验室门牌号识别" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/24/%E9%A1%B9%E7%9B%AE/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E9%97%A8%E7%89%8C%E5%8F%B7%E8%AF%86%E5%88%AB/" class="title">实验室门牌号识别</a></p>
+                            <p class="item-date"><time datetime="2018-07-24T10:28:35.000Z" itemprop="datePublished">2018-07-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu996rbjw5j20hv0e9qak.jpg)" alt="大符目标检测-2016大疆Robomasters比赛" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/" class="title">大符目标检测-2016大疆Robomasters比赛</a></p>
+                            <p class="item-date"><time datetime="2018-07-23T06:42:20.000Z" itemprop="datePublished">2018-07-23</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Github/">Github</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCV/">OpenCV</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/">模型优化</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a><span class="category-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CNN/" style="font-size: 17.14px;">CNN</a> <a href="/tags/Github/" style="font-size: 11.43px;">Github</a> <a href="/tags/OpenCV/" style="font-size: 14.29px;">OpenCV</a> <a href="/tags/Python/" style="font-size: 18.57px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 12.86px;">TensorFlow</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据处理</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">机器学习</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/" style="font-size: 11.43px;">模型优化</a> <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 18.57px;">目标检测</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 15.71px;">项目</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://blog.csdn.net/luqiang6q">CSDN</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 陆强</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://example.com/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

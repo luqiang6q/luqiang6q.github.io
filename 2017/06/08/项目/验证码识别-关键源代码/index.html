@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>验证码识别-关键源代码 | lxqiang</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="项目" />
+    
+    <meta name="description" content="关键源代码-传统方法1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991">
+<meta property="og:type" content="article">
+<meta property="og:title" content="验证码识别-关键源代码">
+<meta property="og:url" content="http://example.com/2017/06/08/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB-%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81/index.html">
+<meta property="og:site_name" content="lxqiang">
+<meta property="og:description" content="关键源代码-传统方法1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ws3.sinaimg.cn/large/b41e0ba9ly1fu9bfbd720j20i90d70u7.jpg">
+<meta property="article:published_time" content="2017-06-08T10:25:52.000Z">
+<meta property="article:modified_time" content="2018-08-14T12:48:52.000Z">
+<meta property="article:author" content="陆强">
+<meta property="article:tag" content="项目">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ws3.sinaimg.cn/large/b41e0ba9ly1fu9bfbd720j20i90d70u7.jpg">
+    
+
+    
+        <link rel="alternate" href="http://bbs.ustc.edu.cn/cgi/bbsdoc?board=Intern" title="lxqiang" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?9f4b9fda51086978761e0128dc7f4992";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/C/">C++</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/CNN/">CNN</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Github/">Github</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/OpenCV/">OpenCV</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Python/">Python</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/TensorFlow/">TensorFlow</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/">模型优化</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
+                                    
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-项目/验证码识别-关键源代码" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        验证码识别-关键源代码
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/06/08/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB-%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81/" class="article-date">
+            <time datetime="2017-06-08T10:25:52.000Z" itemprop="datePublished">2017-06-08</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="关键源代码-传统方法"><a href="#关键源代码-传统方法" class="headerlink" title="关键源代码-传统方法"></a>关键源代码-传统方法</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/opencv.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;OCR.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">ifstream <span class="title">file</span><span class="params">(<span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test\\imageName.txt&quot;</span>)</span></span>;  <span class="comment">//输入图像的目录   </span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> img_index = <span class="number">0</span>;<span class="comment">//判断当前是第几张图片</span></span><br><span class="line">	<span class="keyword">int</span> num_error = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (!file.eof())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">char</span> txt_cont[<span class="number">1000</span>];</span><br><span class="line">		file.getline(txt_cont, <span class="number">1000</span>);<span class="comment">//读出输入流file中imageName.txt的每一行  </span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">char</span> img_file[<span class="number">1000</span>], save_file[<span class="number">1000</span>], save_file1[<span class="number">1000</span>], save_file2[<span class="number">1000</span>], save_file3[<span class="number">1000</span>], save_file4[<span class="number">1000</span>], save_file5[<span class="number">1000</span>];</span><br><span class="line">		<span class="built_in">sprintf</span>(img_file, <span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test\\%s&quot;</span>, txt_cont);<span class="comment">//输入图像的目录  </span></span><br><span class="line"></span><br><span class="line">		<span class="built_in">sprintf</span>(save_file, <span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test识别结果\\%s&quot;</span>, txt_cont);<span class="comment">//保存输入图像  </span></span><br><span class="line">		<span class="built_in">sprintf</span>(save_file1, <span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test识别结果\\%c[1]%s&quot;</span>, txt_cont[<span class="number">0</span>], txt_cont);</span><br><span class="line">		<span class="built_in">sprintf</span>(save_file2, <span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test识别结果\\%c[2]%s&quot;</span>, txt_cont[<span class="number">1</span>], txt_cont);</span><br><span class="line">		<span class="built_in">sprintf</span>(save_file3, <span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test识别结果\\%c[3]%s&quot;</span>, txt_cont[<span class="number">2</span>], txt_cont);</span><br><span class="line">		<span class="built_in">sprintf</span>(save_file4, <span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test识别结果\\%c[4]%s&quot;</span>, txt_cont[<span class="number">3</span>], txt_cont);</span><br><span class="line">		<span class="built_in">sprintf</span>(save_file5, <span class="string">&quot;E:\\vs project\\项目\\验证码识别\\my验证码识别\\my验证码识别\\test识别结果\\识别错误\\%s&quot;</span>, txt_cont);</span><br><span class="line"></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;--------------------------------------------&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;		识别第&quot;</span> &lt;&lt; img_index+<span class="number">1</span> &lt;&lt; <span class="string">&quot;张&quot;</span>&lt;&lt; txt_cont&lt;&lt;<span class="string">&quot;验证码&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;--------------------------------------------&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">		Mat src_original = imread(img_file);</span><br><span class="line">		<span class="comment">//cout &lt;&lt; img_file;</span></span><br><span class="line">		<span class="comment">//getchar();</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">//	Mat src_original=imread(&quot;1.jpg&quot;);</span></span><br><span class="line">		<span class="keyword">if</span> (src_original.empty())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;图片读取错误&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">			getchar();</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;===============按下任意键，将显示当前识别图片数目及错误率===============&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		++img_index;</span><br><span class="line">		<span class="keyword">unsigned</span> <span class="keyword">int</span> frameCount = <span class="number">0</span>;<span class="comment">//帧数</span></span><br><span class="line">		<span class="keyword">double</span> time0 = <span class="keyword">static_cast</span>&lt;<span class="keyword">double</span>&gt;(getTickCount());<span class="comment">//记录起始时间</span></span><br><span class="line"></span><br><span class="line">		Mat src = src_original.clone();</span><br><span class="line">		imshow(<span class="string">&quot;src&quot;</span>, src);</span><br><span class="line"></span><br><span class="line">		Mat src_gray;</span><br><span class="line">		cvtColor(src, src_gray, CV_BGR2GRAY);</span><br><span class="line">		imshow(<span class="string">&quot;src_gray&quot;</span>, src_gray);</span><br><span class="line">		Mat src_threshold;</span><br><span class="line">		threshold(src_gray, src_threshold, <span class="number">210</span>, <span class="number">255</span>, CV_THRESH_BINARY_INV);</span><br><span class="line">		imshow(<span class="string">&quot;src_threshold&quot;</span>, src_threshold);</span><br><span class="line"></span><br><span class="line">		Mat src_contours;</span><br><span class="line">		src_threshold.copyTo(src_contours);</span><br><span class="line">		<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;Point&gt;&gt; contours;</span><br><span class="line">		<span class="built_in">vector</span>&lt;Vec4i&gt; hierarchy;</span><br><span class="line">		findContours(src_contours, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);<span class="comment">//findContours大写,输入为8位单通道(所以应先二值化再找轮廓，因为查找的都是白色像素)</span></span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="built_in">vector</span>&lt;RotatedRect&gt; <span class="title">rRects</span><span class="params">(contours.size())</span></span>;  <span class="comment">//定义包围点集的最小矩形vector</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; contours.size(); ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			rRects[i] = minAreaRect(Mat(contours[i]));</span><br><span class="line"></span><br><span class="line">			Point2f rect_points[<span class="number">4</span>];</span><br><span class="line">			rRects[i].points(rect_points);</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">4</span>; ++j)</span><br><span class="line">				line(src, rect_points[j], rect_points[(j + <span class="number">1</span>) % <span class="number">4</span>], Scalar(<span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>), <span class="number">1</span>, <span class="number">8</span>);</span><br><span class="line">			<span class="comment">//cout &lt;&lt; &quot;候选ROI轮廓面积为&quot; &lt;&lt; contourArea(contours[i]) &lt;&lt; &#x27;\n&#x27;;</span></span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;width	&quot;</span> &lt;&lt; rRects[i].size.width &lt;&lt; <span class="string">&quot;	height	&quot;</span> &lt;&lt; rRects[i].size.height</span><br><span class="line">				&lt;&lt; <span class="string">&quot;	center	&quot;</span> &lt;&lt; rRects[i].center &lt;&lt; <span class="built_in">endl</span>;<span class="comment">//面积阈值调试用</span></span><br><span class="line">		&#125;</span><br><span class="line">		imshow(<span class="string">&quot;src&quot;</span>, src);<span class="comment">//调试用</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (rRects.size() == <span class="number">4</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//对矩形框位置按数字顺序排序</span></span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; ++i)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j&lt;<span class="number">4</span>; ++j)</span><br><span class="line">					<span class="keyword">if</span> (rRects[i].center.x &gt; rRects[j].center.x)</span><br><span class="line">						swap(rRects[i], rRects[j]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">vector</span>&lt;RotatedRect&gt;::const_iterator it = rRects.begin();</span><br><span class="line">			<span class="comment">//-----除去尺寸较为极端的非字符矩形框-----</span></span><br><span class="line">			<span class="keyword">while</span> (it != rRects.end())</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">//排除小方格，排除条件依据与数字1的区别</span></span><br><span class="line">				<span class="comment">//比it-&gt;size.height * it-&gt;size.width&lt;8更好</span></span><br><span class="line">				<span class="keyword">if</span> ((it-&gt;size.height&lt;<span class="number">2</span> &amp;&amp; it-&gt;size.width &lt;= <span class="number">8</span>) || (it-&gt;size.width&lt;<span class="number">2</span> &amp;&amp; it-&gt;size.height &lt;= <span class="number">8</span>))</span><br><span class="line">				&#123;</span><br><span class="line">					it = rRects.erase(it);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">				&#123;</span><br><span class="line">					++it;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; rRects.size();</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> (rRects.size() != <span class="number">4</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;字符框提取错误 return 2&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">				<span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; ++i)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j&lt;<span class="number">4</span>; ++j)</span><br><span class="line">						<span class="keyword">if</span> (rRects[i].center.x &gt; rRects[j].center.x)</span><br><span class="line">							swap(rRects[i], rRects[j]);</span><br><span class="line">				&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		Mat img_ROI[<span class="number">4</span>];</span><br><span class="line">		Mat result_resized[<span class="number">4</span>];</span><br><span class="line">		<span class="keyword">int</span> charSize = <span class="number">28</span>;<span class="comment">//分割出的字符归一化尺寸</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">float</span> r = (<span class="keyword">float</span>)rRects[i].size.height / (<span class="keyword">float</span>)rRects[i].size.width;</span><br><span class="line">			<span class="keyword">float</span> angle = rRects[i].angle;</span><br><span class="line">			<span class="keyword">if</span> (r &lt; <span class="number">1</span>)</span><br><span class="line">				angle = <span class="number">90</span> + angle;</span><br><span class="line">			Mat rotmat = getRotationMatrix2D(rRects[i].center, angle, <span class="number">1</span>);<span class="comment">//旋转矩阵</span></span><br><span class="line"></span><br><span class="line">			Mat img_rotated;</span><br><span class="line">			warpAffine(src_threshold, img_rotated, rotmat, src_threshold.size(), CV_INTER_CUBIC);</span><br><span class="line">			imshow(<span class="string">&quot;img_rotated&quot;</span>, img_rotated);</span><br><span class="line">			<span class="comment">//因为RotatedRect的宽高因角度不同而不同。</span></span><br><span class="line">			<span class="comment">//此处是在旋转后，矩形位置已经摆正了。此时应将长的作为宽，短的作为高（旋转后必须这样调整。如果未旋转，裁剪直接用rotatedrects[i].size即可，见上面getRectSubPix用法）</span></span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> (r &lt; <span class="number">1</span>)</span><br><span class="line">				swap(rRects[i].size.width, rRects[i].size.height);</span><br><span class="line"></span><br><span class="line">			getRectSubPix(img_rotated, rRects[i].size, rRects[i].center, img_ROI[i]);</span><br><span class="line"></span><br><span class="line">			<span class="comment">//----------仿射变换进行预处理-----------</span></span><br><span class="line">			<span class="keyword">int</span> h = img_ROI[i].rows;<span class="comment">//Mat类只有cols和rows，没有height和width成员</span></span><br><span class="line">			<span class="keyword">int</span> w = img_ROI[i].cols;</span><br><span class="line">			Mat transformMat = Mat::eye(<span class="number">2</span>, <span class="number">3</span>, CV_32F);</span><br><span class="line">			<span class="keyword">int</span> m = max(w, h);</span><br><span class="line">			transformMat.at&lt;<span class="keyword">float</span>&gt;(<span class="number">0</span>, <span class="number">2</span>) = m / <span class="number">2</span> - w / <span class="number">2</span>;</span><br><span class="line">			transformMat.at&lt;<span class="keyword">float</span>&gt;(<span class="number">1</span>, <span class="number">2</span>) = m / <span class="number">2</span> - h / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">			<span class="function">Mat <span class="title">warpImage</span><span class="params">(m, m, img_ROI[i].type())</span></span>;</span><br><span class="line">			warpAffine(img_ROI[i], warpImage, transformMat, warpImage.size(), INTER_LINEAR, BORDER_CONSTANT, Scalar(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">			<span class="comment">//归一化为charSzie 此处为28*28</span></span><br><span class="line">			<span class="comment">//注意;resize过后就不是二值图了</span></span><br><span class="line">			resize(warpImage, result_resized[i], Size(charSize, charSize));</span><br><span class="line"></span><br><span class="line">			<span class="comment">//---------------直接resize会产生变形-------------</span></span><br><span class="line">			<span class="comment">//result_resized[i].create(28, 18, CV_8UC1);//inline void Mat::create(int _rows, int _cols, int _type)</span></span><br><span class="line">			<span class="comment">//resize(img_ROI[i], result_resized[i], result_resized[i].size(), 0, 0, INTER_CUBIC);</span></span><br><span class="line">			<span class="comment">//imshow(&quot;result_resized&quot;, result_resized[i]);</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		CvSVM svm;</span><br><span class="line">		svm.load(<span class="string">&quot;svm.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">		OCR ocr;</span><br><span class="line">		<span class="keyword">char</span> characters[<span class="number">8</span>];</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;<span class="number">4</span>; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//此处字符图像已经是gray灰度图了，不需要再cvtColor一下</span></span><br><span class="line">			<span class="comment">//将原图像转换为二值图像.threshold的输入为8位  </span></span><br><span class="line">			cv::threshold(result_resized[i], result_resized[i], <span class="number">128</span>, <span class="number">1</span>, cv::THRESH_BINARY);<span class="comment">//???为啥是1，改成255最后细化反而变粗了</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">//提取特征、预测</span></span><br><span class="line">			Mat f = ocr.features(result_resized[i], <span class="number">28</span>);<span class="comment">//此处应与OCR::OCR(string trainFile)中的数据集选择对应</span></span><br><span class="line">			f.convertTo(f, CV_32FC1);<span class="comment">//必须要转换成CV_32FC1格式</span></span><br><span class="line">			characters[i] = svm.predict(f);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*		imwrite(save_file1, result_resized[0]);</span></span><br><span class="line"><span class="comment">		imwrite(save_file2, result_resized[1]);</span></span><br><span class="line"><span class="comment">		imwrite(save_file3, result_resized[2]);</span></span><br><span class="line"><span class="comment">		imwrite(save_file4, result_resized[3]);</span></span><br><span class="line"><span class="comment">*/</span>		</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;验证码为：&quot;</span> &lt;&lt; characters[<span class="number">0</span>] &lt;&lt; characters[<span class="number">1</span>] &lt;&lt; characters[<span class="number">2</span>] &lt;&lt; characters[<span class="number">3</span>] &lt;&lt; <span class="built_in">endl</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;当前帧率为：&quot;</span> &lt;&lt; getTickFrequency() / (getTickCount() - time0) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;处理时间为:&quot;</span> &lt;&lt; (getTickCount() - time0)/ getTickFrequency()&lt;&lt;<span class="string">&quot;s&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">stringstream</span> ss;</span><br><span class="line">		<span class="built_in">string</span> labNumber;</span><br><span class="line">		ss &lt;&lt; characters[<span class="number">0</span>] &lt;&lt; characters[<span class="number">1</span>] &lt;&lt; characters[<span class="number">2</span>] &lt;&lt; characters[<span class="number">3</span>] &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		ss &gt;&gt; labNumber;</span><br><span class="line"></span><br><span class="line">		resize(src_original, src_original, Size(<span class="number">660</span>, <span class="number">140</span>));</span><br><span class="line">		putText(src_original, labNumber, Point(src_original.cols / <span class="number">2</span>, src_original.rows / <span class="number">5</span>), CV_FONT_HERSHEY_COMPLEX, <span class="number">1</span>, Scalar(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> num_same=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">4</span>;++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (txt_cont[i] == characters[i])</span><br><span class="line">				++num_same;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (num_same == <span class="number">4</span>)</span><br><span class="line">			imwrite(save_file, src_original);</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			imwrite(save_file5, src_original);</span><br><span class="line">			++num_error;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="comment">//这个是前面批处理操作 while (!file.eof()) &#123;&#125; 的括号</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;共识别了&quot;</span> &lt;&lt; img_index &lt;&lt; <span class="string">&quot;张验证码――――&quot;</span> &lt;&lt; num_error &lt;&lt;<span class="string">&quot;张识别错误&quot;</span>&lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">float</span> error = <span class="keyword">float</span>(num_error) / img_index;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;错误率为&quot;</span> &lt;&lt; error &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	waitKey();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="关键源代码-CNN方法"><a href="#关键源代码-CNN方法" class="headerlink" title="关键源代码-CNN方法"></a>关键源代码-CNN方法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[1]:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># _*_ coding:utf-8 _*_</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;验证码识别-6个3x3conv+2个FC层</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;]=&quot;-1&quot;  # 禁止GPU</span></span><br><span class="line"><span class="comment"># os.environ[&quot;CUDA_DEVICE_ORDER&quot;]=&quot;PCI_BUS_ID&quot;</span></span><br><span class="line"><span class="comment"># os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;]=&quot;0&quot;  # 使用对应序号的GPU</span></span><br><span class="line"><span class="comment"># config = tf.ConfigProto()</span></span><br><span class="line"><span class="comment"># config.gpu_options.per_process_gpu_memory_fraction = 0.9  # 占用GPU90%的显存</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 【1】载入数据集，设置训练参数、网络参数、placeholder=============================</span></span><br><span class="line"><span class="comment"># mnist = input_data.read_data_sets(&quot;MNIST_data&quot;,one_hot=True)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练参数</span></span><br><span class="line">batch_size = <span class="number">16</span></span><br><span class="line"><span class="comment"># n_batch = mnist.train.num_examples // batch_size + 1</span></span><br><span class="line">n_batch = <span class="number">3000</span> // batch_size + <span class="number">1</span></span><br><span class="line">epoches = <span class="number">5000</span></span><br><span class="line">diaplay_steps = <span class="number">1</span></span><br><span class="line">learning_rate = <span class="number">1e-4</span>  <span class="comment"># 另，也可将学习率定义为变量？</span></span><br><span class="line">dropout = <span class="number">0.8</span>  <span class="comment"># Dropout, probability to keep units</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 网络参数（数据集参数）</span></span><br><span class="line">num_train = <span class="number">142326</span>  <span class="comment"># 训练集图片个数</span></span><br><span class="line">num_val = <span class="number">3560</span></span><br><span class="line">num_test = <span class="number">1196</span></span><br><span class="line">n_classes = <span class="number">36</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># placeholder: tf graph的输入x, y、keep_prob</span></span><br><span class="line"><span class="comment"># 要有名字，因为后续保存模型再使用，需要读取出来重新给占位符赋值</span></span><br><span class="line">x = tf.placeholder(tf.float32, [<span class="literal">None</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>], name=<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line"><span class="comment"># 标签数据不是独热编码，如果标签数据是独热编码shape=[batch_size,ClassesNumber]</span></span><br><span class="line">y = tf.placeholder(tf.int32, [<span class="literal">None</span>, n_classes])</span><br><span class="line"><span class="comment"># 要有名字，保存模型之后再使用需要把它调用出来使用的</span></span><br><span class="line">keep_prob = tf.placeholder(tf.float32, name=<span class="string">&#x27;keep_prob&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取文件</span></span><br><span class="line"><span class="comment"># tfrecords_path所在目录位置</span></span><br><span class="line">tfrecord_train_path = <span class="string">&quot;./data_segment/tfrecords-28/captcha_train.tfrecords&quot;</span></span><br><span class="line">tfrecord_val_path = <span class="string">&quot;./data_segment/tfrecords-28/captcha_val.tfrecords&quot;</span></span><br><span class="line">tfrecord_test_path = <span class="string">&quot;./data_segment/tfrecords-28/captcha_test.tfrecords&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[5]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 【2】创建网络</span></span><br><span class="line"><span class="comment"># 变量封装：各层weights、biases</span></span><br><span class="line">weights = &#123;</span><br><span class="line">    <span class="string">&#x27;w_conv1&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">32</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;w_conv2&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">32</span>, <span class="number">32</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;w_conv3&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">32</span>, <span class="number">32</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;w_conv4&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">32</span>, <span class="number">64</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;w_conv5&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">64</span>, <span class="number">64</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;w_conv6&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">64</span>, <span class="number">64</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 全连接层有1024个神经元</span></span><br><span class="line">    <span class="string">&#x27;w_fc1&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">7</span> * <span class="number">7</span> * <span class="number">64</span>, <span class="number">1024</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;w_fc2&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">1024</span>, n_classes], stddev=<span class="number">0.1</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">biases = &#123;</span><br><span class="line">    <span class="string">&#x27;b_conv1&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">32</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;b_conv2&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">32</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;b_conv3&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">32</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;b_conv4&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">64</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;b_conv5&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">64</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line">    <span class="string">&#x27;b_conv6&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">64</span>], stddev=<span class="number">0.1</span>)),</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;b_fc1&#x27;</span>: tf.Variable(tf.truncated_normal([<span class="number">1024</span>], stddev=<span class="number">0.1</span>)),  <span class="comment"># 1024个节点</span></span><br><span class="line">    <span class="string">&#x27;b_fc2&#x27;</span>: tf.Variable(tf.truncated_normal([n_classes], stddev=<span class="number">0.1</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 函数封装：卷积、pooling、网络结构</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv2d</span>(<span class="params">x, weights, biases, strides=<span class="number">1</span></span>):</span></span><br><span class="line">    x = tf.nn.conv2d(</span><br><span class="line">        x,</span><br><span class="line">        weights,</span><br><span class="line">        strides=[</span><br><span class="line">            <span class="number">1</span>,</span><br><span class="line">            strides,</span><br><span class="line">            strides,</span><br><span class="line">            <span class="number">1</span>],</span><br><span class="line">        padding=<span class="string">&#x27;SAME&#x27;</span>) + biases</span><br><span class="line">    <span class="comment"># 此处加上b也可以这样写，x = tf.nn.bias_add(x, biases)</span></span><br><span class="line">    <span class="keyword">return</span> tf.nn.relu(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">maxpool2d</span>(<span class="params">x, k=<span class="number">2</span></span>):</span></span><br><span class="line">    <span class="keyword">return</span> tf.nn.max_pool(x, ksize=[<span class="number">1</span>, k, k, <span class="number">1</span>], strides=[<span class="number">1</span>, k, k, <span class="number">1</span>],</span><br><span class="line">                          padding=<span class="string">&#x27;SAME&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv_net</span>(<span class="params">x, weights, biases, keep_prob</span>):</span></span><br><span class="line">    <span class="comment"># 改变x的格式转为4D的向量[batch, in_height, in_width, in_channels]`</span></span><br><span class="line">    x = tf.reshape(x, shape=[-<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>])  <span class="comment"># -1表示该值不定</span></span><br><span class="line"></span><br><span class="line">    conv1 = conv2d(x, weights[<span class="string">&#x27;w_conv1&#x27;</span>], biases[<span class="string">&#x27;b_conv1&#x27;</span>])</span><br><span class="line">    conv2 = conv2d(conv1, weights[<span class="string">&#x27;w_conv2&#x27;</span>], biases[<span class="string">&#x27;b_conv2&#x27;</span>])</span><br><span class="line">    conv3 = conv2d(conv2, weights[<span class="string">&#x27;w_conv3&#x27;</span>], biases[<span class="string">&#x27;b_conv3&#x27;</span>])</span><br><span class="line">    conv3 = maxpool2d(conv3)</span><br><span class="line"></span><br><span class="line">    conv4 = conv2d(conv3, weights[<span class="string">&#x27;w_conv4&#x27;</span>], biases[<span class="string">&#x27;b_conv4&#x27;</span>])</span><br><span class="line">    conv5 = conv2d(conv4, weights[<span class="string">&#x27;w_conv5&#x27;</span>], biases[<span class="string">&#x27;b_conv5&#x27;</span>])</span><br><span class="line">    conv6 = conv2d(conv5, weights[<span class="string">&#x27;w_conv6&#x27;</span>], biases[<span class="string">&#x27;b_conv6&#x27;</span>])</span><br><span class="line">    conv6 = maxpool2d(conv6)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># .get_shape().as_list()返回保存tensor尺寸的一个元组</span></span><br><span class="line">    fc1 = tf.reshape(</span><br><span class="line">        conv6, shape=[-<span class="number">1</span>, weights[<span class="string">&#x27;w_fc1&#x27;</span>].get_shape().as_list()[<span class="number">0</span>]])</span><br><span class="line">    fc1 = tf.matmul(fc1, weights[<span class="string">&#x27;w_fc1&#x27;</span>]) + biases[<span class="string">&#x27;b_fc1&#x27;</span>]</span><br><span class="line">    fc1 = tf.nn.relu(fc1)</span><br><span class="line">    fc1 = tf.nn.dropout(fc1, keep_prob)</span><br><span class="line"></span><br><span class="line">    fc2 = tf.matmul(fc1, weights[<span class="string">&#x27;w_fc2&#x27;</span>]) + biases[<span class="string">&#x27;b_fc2&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> fc2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[6]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_tfrecord</span>(<span class="params">filename</span>):</span></span><br><span class="line">    filename_queue = tf.train.string_input_producer([filename])  <span class="comment"># 生成一个queue队列</span></span><br><span class="line"></span><br><span class="line">    reader = tf.TFRecordReader()</span><br><span class="line">    _, serialized_example = reader.read(filename_queue)  <span class="comment"># 返回文件名和文件</span></span><br><span class="line">    features = tf.parse_single_example(</span><br><span class="line">        serialized_example, features=&#123;</span><br><span class="line">            <span class="string">&#x27;label&#x27;</span>: tf.FixedLenFeature(</span><br><span class="line">                [], tf.int64), <span class="string">&#x27;img_raw&#x27;</span>: tf.FixedLenFeature(</span><br><span class="line">                [], tf.string), &#125;)  <span class="comment"># 将image数据和label取出来</span></span><br><span class="line"></span><br><span class="line">    img = tf.decode_raw(features[<span class="string">&#x27;img_raw&#x27;</span>], tf.uint8)</span><br><span class="line">    img = tf.reshape(img, [<span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>])</span><br><span class="line">    img = tf.cast(img, tf.float32) * (<span class="number">1.</span> / <span class="number">255</span>)  <span class="comment"># 图像数据归一化</span></span><br><span class="line"><span class="comment">#     img = tf.cast(img, tf.float32)</span></span><br><span class="line">    label = tf.cast(features[<span class="string">&#x27;label&#x27;</span>], tf.int32)  <span class="comment"># 在流中抛出label张量</span></span><br><span class="line">    <span class="keyword">return</span> img, label</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取出batch的数据</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_tfrecord_batch</span>(<span class="params">batch_size, isTrain=<span class="literal">True</span>, isVal=<span class="literal">True</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> isTrain:</span><br><span class="line">        tfrecords_path = tfrecord_train_path</span><br><span class="line">    <span class="keyword">elif</span> isVal:</span><br><span class="line">        tfrecords_path = tfrecord_val_path</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        tfrecords_path = tfrecord_test_path</span><br><span class="line">    img, label = read_tfrecord(tfrecords_path)</span><br><span class="line">    img_batch, label_batch = tf.train.shuffle_batch([img, label],</span><br><span class="line">                                                    batch_size=batch_size,</span><br><span class="line">                                                    num_threads=<span class="number">256</span>,   <span class="comment"># 线程数</span></span><br><span class="line">                                                    capacity=<span class="number">600</span>,   <span class="comment"># 即每次取出capacity个样本，batch再从中选</span></span><br><span class="line">                                                    min_after_dequeue=<span class="number">200</span>)  <span class="comment"># 即队列中至少min_after_dequeue个样本,该值小于capacity的值</span></span><br><span class="line">    <span class="keyword">return</span> img_batch, label_batch</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[7]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 【3】模型训练与评估============================================</span></span><br><span class="line"><span class="comment"># 模型loss、optimizer选择</span></span><br><span class="line">fc2 = conv_net(x, weights, biases, keep_prob)</span><br><span class="line">loss = tf.reduce_mean(</span><br><span class="line">    tf.nn.softmax_cross_entropy_with_logits(</span><br><span class="line">        labels=y, logits=fc2), name=<span class="string">&#x27;loss&#x27;</span>)</span><br><span class="line">optimizer = tf.train.MomentumOptimizer(learning_rate, <span class="number">0.9</span>)</span><br><span class="line"><span class="comment"># optimizer = tf.train.AdadeltaOptimizer(1e-3)</span></span><br><span class="line"><span class="comment"># optimizer = tf.train.GradientDescentOptimizer(0.1)</span></span><br><span class="line"><span class="comment"># optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, name=&#x27;Adam&#x27;)</span></span><br><span class="line">train_step = optimizer.minimize(loss, name=<span class="string">&#x27;train_step&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型评估</span></span><br><span class="line">prediction = tf.nn.softmax(fc2, name=<span class="string">&#x27;prediction&#x27;</span>)</span><br><span class="line">correct_pred = tf.equal(tf.argmax(prediction, <span class="number">1</span>), tf.argmax(y, <span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32), name=<span class="string">&#x27;accuracy&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[8]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 【4】开始训练，print结果</span></span><br><span class="line"><span class="comment"># 导入数据</span></span><br><span class="line"><span class="keyword">with</span> tf.device(<span class="string">&#x27;/cpu:0&#x27;</span>):</span><br><span class="line">    train_x_batch, train_y_batch = get_tfrecord_batch(</span><br><span class="line">        batch_size, isTrain=<span class="literal">True</span>, isVal=<span class="literal">False</span>)</span><br><span class="line">    <span class="comment"># tfrecords中的label不是one-hot格式，需要转一下</span></span><br><span class="line">    train_y_batch = tf.one_hot(train_y_batch, n_classes)</span><br><span class="line"></span><br><span class="line">    val_x_batch, val_y_batch = get_tfrecord_batch(</span><br><span class="line">        batch_size, isTrain=<span class="literal">False</span>, isVal=<span class="literal">True</span>)</span><br><span class="line">    val_y_batch = tf.one_hot(val_y_batch, n_classes)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 整个train和val数据集数据=====================</span></span><br><span class="line">    train_x, train_y = get_tfrecord_batch(</span><br><span class="line">        num_train, isTrain=<span class="literal">True</span>, isVal=<span class="literal">False</span>)  <span class="comment"># 这里去的batch数量&gt;capacity，但并未有错误</span></span><br><span class="line">    train_y = tf.one_hot(train_y, n_classes)</span><br><span class="line"></span><br><span class="line">    val_x, val_y = get_tfrecord_batch(num_val, isTrain=<span class="literal">False</span>, isVal=<span class="literal">True</span>)</span><br><span class="line">    val_y = tf.one_hot(val_y, n_classes)</span><br><span class="line"></span><br><span class="line">    test_x, test_y = get_tfrecord_batch(</span><br><span class="line">        num_test, isTrain=<span class="literal">False</span>, isVal=<span class="literal">False</span>)  <span class="comment"># 这里1196是整个测试图片的个数</span></span><br><span class="line">    test_y = tf.one_hot(test_y, n_classes)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[10]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">saver = tf.train.Saver(max_to_keep=<span class="number">3</span>)  <span class="comment"># 只保存精度最好的那3个</span></span><br><span class="line"></span><br><span class="line">max_acc = <span class="number">0</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line">    saver.restore(</span><br><span class="line">        sess,</span><br><span class="line">        <span class="string">&#x27;./checkpoints/3-10-3,3,3,3/3-10-６layers_tiny_vgg.ckpt-524&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    coord = tf.train.Coordinator()  <span class="comment"># 生成queue队列好像是（读取tfrecord用的）</span></span><br><span class="line">    threads = tf.train.start_queue_runners(coord=coord)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;Start training\n&#x27;</span>)</span><br><span class="line">    img_test, label_test = sess.run([test_x, test_y])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, epoches + <span class="number">1</span>):</span><br><span class="line">        avg_loss = <span class="number">0.</span></span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n_batch + <span class="number">1</span>):</span><br><span class="line">            img_batch, label_batch = sess.run([train_x_batch, train_y_batch])</span><br><span class="line"></span><br><span class="line">            sess.run(</span><br><span class="line">                train_step,</span><br><span class="line">                feed_dict=&#123;</span><br><span class="line">                    x: img_batch,</span><br><span class="line">                    y: label_batch,</span><br><span class="line">                    keep_prob: dropout&#125;)</span><br><span class="line">            avg_loss += sess.run(loss,</span><br><span class="line">                                 feed_dict=&#123;x: img_batch,</span><br><span class="line">                                            y: label_batch,</span><br><span class="line">                                            keep_prob: <span class="number">1.0</span>&#125;) / n_batch</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> epoch % diaplay_steps == <span class="number">0</span> <span class="keyword">or</span> epoch == <span class="number">1</span>:</span><br><span class="line">            img_batch, label_batch = sess.run([train_x_batch, train_y_batch])</span><br><span class="line">            img_val, label_val = sess.run([val_x, val_y])</span><br><span class="line">            train_acc = sess.run(</span><br><span class="line">                accuracy,</span><br><span class="line">                feed_dict=&#123;</span><br><span class="line">                    x: img_batch,</span><br><span class="line">                    y: label_batch,</span><br><span class="line">                    keep_prob: <span class="number">1.0</span>&#125;)  <span class="comment"># 求accuracy时，keep_prob应为1（此时相当于检测阶段）</span></span><br><span class="line">            val_acc = sess.run(accuracy, feed_dict=&#123;x: img_val,</span><br><span class="line">                                                    y: label_val,</span><br><span class="line">                                                    keep_prob: <span class="number">1.0</span>&#125;)</span><br><span class="line">            <span class="comment"># 测试集准确率==============================================</span></span><br><span class="line">            test_acc = sess.run(</span><br><span class="line">                accuracy,</span><br><span class="line">                feed_dict=&#123;</span><br><span class="line">                    x: img_test,</span><br><span class="line">                    y: label_test,</span><br><span class="line">                    keep_prob: <span class="number">1.0</span>&#125;)</span><br><span class="line"></span><br><span class="line">            print(</span><br><span class="line">                <span class="string">&quot;Epoch: &#123;:d&#125;/&#123;:d&#125;, avg_loss: &#123;:.6f&#125;, (batch)train_acc: &#123;:.4f&#125;, val_acc: &#123;:.4f&#125;, test_acc:&#123;:.4f&#125;&quot;</span>.<span class="built_in">format</span>(</span><br><span class="line">                    epoch,</span><br><span class="line">                    epoches,</span><br><span class="line">                    avg_loss,</span><br><span class="line">                    train_acc,</span><br><span class="line">                    val_acc,</span><br><span class="line">                    test_acc))</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> val_acc &gt; max_acc:</span><br><span class="line">                max_acc = val_acc</span><br><span class="line">                saver.save(</span><br><span class="line">                    sess,</span><br><span class="line">                    <span class="string">&#x27;./checkpoints/3-10-3,3,3,3/3-10-６layers_tiny_vgg.ckpt&#x27;</span>,</span><br><span class="line">                    global_step=epoch)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">&quot;training finish!&quot;</span>)</span><br><span class="line"></span><br><span class="line">    coord.request_stop()</span><br><span class="line">    coord.join(threads)</span><br></pre></td></tr></table></figure>
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+</article>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/luqiang6q" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="https://weibo.com/6Qiang/profile?rightmod=1&wvr=6&mod=personinfo" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="http://bbs.ustc.edu.cn/cgi/bbsdoc?board=Intern" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/06/28/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB-%E8%BF%9B%E9%98%B6%E6%96%B9%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            验证码识别-进阶方法
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/05/28/OpenCV/%E9%AA%A8%E6%9E%B6%E7%BB%86%E5%8C%96%E4%BB%8B%E7%BB%8D%E5%8F%8Ademo/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">骨架细化介绍及demo</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+<div class="widget-wrap widget-list">
+    <h3 class="widget-title">目录</h3>
+    <div class="widget">
+        <div id="toc" class="toc-article">
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81-%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">关键源代码-传统方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81-CNN%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">关键源代码-CNN方法</span></a></li></ol>
+        </div>
+    </div>
+</div>
+
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8E%E7%AC%94%E5%B0%96%E6%A3%80%E6%B5%8B%E7%9A%84%E6%89%8B%E5%86%99%E6%A8%A1%E4%BB%BF%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9e25fxhgj20hs0dcwlp.jpg)" alt="基于笔尖检测的手写模仿机器人" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8E%E7%AC%94%E5%B0%96%E6%A3%80%E6%B5%8B%E7%9A%84%E6%89%8B%E5%86%99%E6%A8%A1%E4%BB%BF%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="title">基于笔尖检测的手写模仿机器人</a></p>
+                            <p class="item-date"><time datetime="2018-07-26T11:48:32.000Z" itemprop="datePublished">2018-07-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EGRNN%E5%92%8CGBDT%E7%9A%84%E5%A7%BF%E6%80%81%E8%AF%AF%E5%B7%AE%E8%A1%A5%E5%81%BF/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ws4.sinaimg.cn/large/b41e0ba9ly1fuise6vwjgj20bc06ewj5.jpg)" alt="基于GRNN和GBDT的姿态误差补偿" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EGRNN%E5%92%8CGBDT%E7%9A%84%E5%A7%BF%E6%80%81%E8%AF%AF%E5%B7%AE%E8%A1%A5%E5%81%BF/" class="title">基于GRNN和GBDT的姿态误差补偿</a></p>
+                            <p class="item-date"><time datetime="2018-07-26T01:48:32.000Z" itemprop="datePublished">2018-07-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/25/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ws3.sinaimg.cn/large/b41e0ba9ly1fu9bfbd720j20i90d70u7.jpg)" alt="验证码识别" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/25/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB/" class="title">验证码识别</a></p>
+                            <p class="item-date"><time datetime="2018-07-25T10:23:46.000Z" itemprop="datePublished">2018-07-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/24/%E9%A1%B9%E7%9B%AE/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E9%97%A8%E7%89%8C%E5%8F%B7%E8%AF%86%E5%88%AB/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9a1gwko4j20dw0af44l.jpg)" alt="实验室门牌号识别" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/24/%E9%A1%B9%E7%9B%AE/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E9%97%A8%E7%89%8C%E5%8F%B7%E8%AF%86%E5%88%AB/" class="title">实验室门牌号识别</a></p>
+                            <p class="item-date"><time datetime="2018-07-24T10:28:35.000Z" itemprop="datePublished">2018-07-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu996rbjw5j20hv0e9qak.jpg)" alt="大符目标检测-2016大疆Robomasters比赛" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/" class="title">大符目标检测-2016大疆Robomasters比赛</a></p>
+                            <p class="item-date"><time datetime="2018-07-23T06:42:20.000Z" itemprop="datePublished">2018-07-23</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Github/">Github</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCV/">OpenCV</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/">模型优化</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a><span class="category-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CNN/" style="font-size: 17.14px;">CNN</a> <a href="/tags/Github/" style="font-size: 11.43px;">Github</a> <a href="/tags/OpenCV/" style="font-size: 14.29px;">OpenCV</a> <a href="/tags/Python/" style="font-size: 18.57px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 12.86px;">TensorFlow</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据处理</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">机器学习</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/" style="font-size: 11.43px;">模型优化</a> <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 18.57px;">目标检测</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 15.71px;">项目</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://blog.csdn.net/luqiang6q">CSDN</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 陆强</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://example.com/2017/06/08/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB-%E5%85%B3%E9%94%AE%E6%BA%90%E4%BB%A3%E7%A0%81/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

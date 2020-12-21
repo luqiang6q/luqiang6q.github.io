@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Faster R-CNN | lxqiang</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="目标检测" />
+    
+    <meta name="description" content="0. 参考 从编程实现角度学习Faster R-CNN（附极简实现，超赞）：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;32404424   从结构、原理到实现，Faster R-CNN全解析(还没看)：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;32702387   https:&#x2F;&#x2F;blog.csdn.net&#x2F;u011534057&#x2F;article&#x2F;details&#x2F;51">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Faster R-CNN">
+<meta property="og:url" content="http://example.com/2018/04/25/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/Faster%20R-CNN/index.html">
+<meta property="og:site_name" content="lxqiang">
+<meta property="og:description" content="0. 参考 从编程实现角度学习Faster R-CNN（附极简实现，超赞）：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;32404424   从结构、原理到实现，Faster R-CNN全解析(还没看)：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;32702387   https:&#x2F;&#x2F;blog.csdn.net&#x2F;u011534057&#x2F;article&#x2F;details&#x2F;51">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9hdft1rnj21gk0p2k1y.jpg">
+<meta property="article:published_time" content="2018-04-25T14:03:21.000Z">
+<meta property="article:modified_time" content="2018-08-14T12:13:32.000Z">
+<meta property="article:author" content="陆强">
+<meta property="article:tag" content="目标检测">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9hdft1rnj21gk0p2k1y.jpg">
+    
+
+    
+        <link rel="alternate" href="http://bbs.ustc.edu.cn/cgi/bbsdoc?board=Intern" title="lxqiang" type="application/atom+xml" />
+    
+
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?9f4b9fda51086978761e0128dc7f4992";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/C/">C++</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/CNN/">CNN</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Github/">Github</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/OpenCV/">OpenCV</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Python/">Python</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/TensorFlow/">TensorFlow</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/">模型优化</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></li></ul>
+                                    
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-目标检测/Faster R-CNN" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Faster R-CNN
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/04/25/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/Faster%20R-CNN/" class="article-date">
+            <time datetime="2018-04-25T14:03:21.000Z" itemprop="datePublished">2018-04-25</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag">目标检测</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="0-参考"><a href="#0-参考" class="headerlink" title="0. 参考"></a>0. 参考</h2><blockquote>
+<p>从编程实现角度学习Faster R-CNN（附极简实现，超赞）：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/32404424">https://zhuanlan.zhihu.com/p/32404424</a></p>
+</blockquote>
+<blockquote>
+<p>从结构、原理到实现，Faster R-CNN全解析(<strong>还没看</strong>)：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/32702387">https://zhuanlan.zhihu.com/p/32702387</a></p>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011534057/article/details/51247371">https://blog.csdn.net/u011534057/article/details/51247371</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24916624">https://zhuanlan.zhihu.com/p/24916624</a></li>
+</ul>
+<h2 id="1-论文概况"><a href="#1-论文概况" class="headerlink" title="1. 论文概况"></a>1. 论文概况</h2><p><strong>1. Motivation</strong></p>
+<blockquote>
+<p>在region proposal + CNN分类的这种目标检测框架中，<strong>region proposal质量好坏直接影响到目标检测任务的精度</strong>。如果找到一种方法只提取几百个或者更少的高质量的预选窗口，而且召回率很高，这不但能加快目标检测速度，还能提高目标检测的性能（假阳例少）。</p>
+</blockquote>
+<blockquote>
+<p>提速：有没有可能直接使用CNN直接产生region proposal并对其分类？</p>
+</blockquote>
+<p><strong>2. 解决什么问题？</strong></p>
+<p>region proposals耗时问题</p>
+<p><strong>3. 提出了什么方法？</strong></p>
+<ol>
+<li>RPN(Region Proposal Networks)</li>
+<li>RPN与Fast R-CNN共享卷积层（交叉训练）<blockquote>
+<p>共享卷积层，只是在末尾的几层分别实现各自的特定的目标任务，那么“候选框选择”和“候选框分类和bbox回归修正”只需一次前向卷积计算即可。</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>4. 效果如何？</strong></p>
+<ul>
+<li>训练和测试更方便；</li>
+<li>精度提升；</li>
+<li>整个网络流程都能共享卷积神经网络提取的的特征信息，节约计算成本，且解决Fast R-CNN算法生成正负样本候选框速度慢的问题，同时避免候选框提取过多导致算法准确率下降。</li>
+</ul>
+<p><strong>5. 还存在什么问题？</strong></p>
+<p>速度还有待进一步提高</p>
+<h2 id="2-整体算法流程"><a href="#2-整体算法流程" class="headerlink" title="2. 整体算法流程"></a>2. 整体算法流程</h2><p><img src="http://wx1.sinaimg.cn/large/b41e0ba9ly1ftd5gpsbmzj20mz05lq33.jpg" alt="image"></p>
+<ol>
+<li>CNN特征提取</li>
+<li>RPN进行候选框选择</li>
+<li>从卷积特征图中取出候选框的卷积特征，接ROI池化，之后送入全连接层进行精确定位和分类；<blockquote>
+<p>Faster R-CNN相当于RPN+Fast R-CNN</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="3-RPN"><a href="#3-RPN" class="headerlink" title="3. RPN"></a>3. RPN</h2><h3 id="3-1-RPN整体思路"><a href="#3-1-RPN整体思路" class="headerlink" title="3.1 RPN整体思路"></a>3.1 RPN整体思路</h3><ul>
+<li>先通过对应关系把feature map上的点映射回原图</li>
+<li>在每一个对应的原图位置处，设置anchor box</li>
+<li>根据该anchor box与ground truth的IOU给它正负标签</li>
+<li>让网络predict box，学习predict box里面是否有object</li>
+</ul>
+<blockquote>
+<p>由于我们只需要找出大致的地方，无论是bbox位置和尺寸精确与否，后面Fast R-CNN都可以进行修正（refine），因此可以对bbox做了三个固定：固定尺度变化（三种尺度），固定scale ratio变化（三种ratio），固定采样方式（在feature map的每个点对应的原图中的位置处上采样），反正后面的工作能进行调整。</p>
+</blockquote>
+<blockquote>
+<p>这相当于给了比较死的初始位置（三个固定），然后来大致判断是否是物体以及所对应的位置。</p>
+</blockquote>
+<h3 id="3-2-RPN算法流程"><a href="#3-2-RPN算法流程" class="headerlink" title="3.2 RPN算法流程"></a>3.2 RPN算法流程</h3><p><img src="http://wx1.sinaimg.cn/large/b41e0ba9ly1ftczl8y7rwj209t0butam.jpg" alt="image"></p>
+<h3 id="3-3-候选区域（anchors）位置计算"><a href="#3-3-候选区域（anchors）位置计算" class="headerlink" title="3.3 候选区域（anchors）位置计算"></a>3.3 候选区域（anchors）位置计算</h3><blockquote>
+<p>假如feature map是一个尺度51*39的256通道图像，对于该图像的每一个位置，考虑9个可能的候选窗口：三种面积、三种比例，这些候选窗口称为anchors;</p>
+</blockquote>
+<blockquote>
+<p>计算anchor box位置的具体作法是：<br>把每个特征点映射回映射回原图的感受野的中心点当成一个基准点，然后围绕这个基准点选取k个不同scale、aspect ratio的anchor。论文中设置了3个scale（128,256,512），3个aspect ratio(1:1,1:2,2:1)</p>
+</blockquote>
+<p><strong>anchor具体的尺度和ratio根据输入图像大小以及目标类型来设置；</strong></p>
+<p>下图示出51*39个anchor中心，以及9种anchor示例</p>
+<p><img src="http://ws2.sinaimg.cn/large/b41e0ba9ly1ftczvt6a1gj20bs0aqdg1.jpg" alt="image"></p>
+<h3 id="3-4-RPN训练"><a href="#3-4-RPN训练" class="headerlink" title="3.4 RPN训练"></a>3.4 RPN训练</h3><h4 id="3-4-1-训练方法：Fast-R-CNN中的image-centric采样策略"><a href="#3-4-1-训练方法：Fast-R-CNN中的image-centric采样策略" class="headerlink" title="3.4.1 训练方法：Fast R-CNN中的image-centric采样策略"></a>3.4.1 训练方法：Fast R-CNN中的image-centric采样策略</h4><p>从20000多个候选的anchor选出256个anchor进行分类和回归位置训练。选择过程如下：</p>
+<ul>
+<li><strong>正样本</strong>：对于每一个ground truth bounding box（gt_bbox），选择与其IOU最高的一个anchor作为正样本；对于剩下的anchor，从中选择和任意一个gt_bbox重叠度超过0.7的anchor作为正样本，正样本的数目不超过128个（==bbox负样本较多，需保持正负样本比例均衡，此处使正负样本比例为1:1==，如果正样本不足128，则用负样本补充）。</li>
+<li><strong>负样本</strong>：随机选择和gt_bbox重叠度小于0.3的anchor作为负样本。</li>
+<li>尺寸超过图像边界的anchor弃去不用，不满足正负样本规定的anchor弃去不用；</li>
+</ul>
+<blockquote>
+<p>正样本有两类，正样本选择中仍选择第一类的原因是考虑到极少数情况下，第二类会没有满足条件的正样本。</p>
+</blockquote>
+<p><img src="http://ws3.sinaimg.cn/large/b41e0ba9ly1ftd55051gcj20hd094ta5.jpg" alt="image"></p>
+<h4 id="3-4-2-loss函数"><a href="#3-4-2-loss函数" class="headerlink" title="3.4.2 loss函数"></a>3.4.2 loss函数</h4><blockquote>
+<p>如下所示的loss函数中，设置λ的值是为了使得loss中的两项在归一化后权重大致相等（可称作λ为权衡参数)<br><img src="http://ws1.sinaimg.cn/large/b41e0ba9ly1ftd5a1yy1lj20jh0fqq6c.jpg" alt="image"></p>
+</blockquote>
+<p><img src="http://ws3.sinaimg.cn/large/b41e0ba9ly1ftd5je3410j20hh0dkdhl.jpg" alt="image"></p>
+<p>如下图所示，==学习的目标是：ground truth bounding box与anchor box之间的4个offset值（并没有显式地提取任何候选窗口，完全使用网络自身完成判断和修正，相当于是回归4个offset值），预测坐标的偏移是为了使网络更容易学习==；</p>
+<p><img src="http://wx1.sinaimg.cn/large/b41e0ba9ly1ftd5agdj3kj206u05saaq.jpg" alt="image"></p>
+<h3 id="3-4-3-RPN的inference：生成ROIs"><a href="#3-4-3-RPN的inference：生成ROIs" class="headerlink" title="3.4.3 RPN的inference：生成ROIs"></a>3.4.3 RPN的inference：生成ROIs</h3><blockquote>
+<p>RoI：region of interest，候选框。RoI不是单纯的从anchor中选取一些出来作为候选框，它还会利用回归位置参数，微调anchor的形状和位置。<br>可以这么理解：在RPN阶段，先穷举生成千上万个anchor，然后利用Ground Truth Bounding Boxes，训练这些anchor，而后从anchor中找出一定数目的候选区域（RoIs）。RoIs在下一阶段用来训练Fast R-CNN（RoIHead），最后生成Predict Bounding Boxes。</p>
+</blockquote>
+<p>RPN在自身训练的同时，还会提供RoIs（region of interests）给Fast RCNN（RoIHead）作为训练样本。</p>
+<p>RPN生成RoIs的过程(ProposalCreator)如下：</p>
+<ul>
+<li>对于每张图片，利用它的feature map， 计算 (H/16)× (W/16)×9（大概20000）个anchor属于前景的概率，以及对应的位置参数。</li>
+<li>选取概率较大的12000个anchor</li>
+<li>利用回归的位置参数，修正这12000个anchor的位置，得到RoIs</li>
+<li>利用非极大值（(Non-maximum suppression, NMS）抑制，选出概率最大的2000个RoIs</li>
+</ul>
+<blockquote>
+<p>注意：在inference的时候，为了提高处理速度，12000和2000分别变为6000和300（取top-N个ROIs）</p>
+</blockquote>
+<blockquote>
+<p>注意：这部分的操作不需要进行反向传播，因此可以利用numpy/tensor实现。</p>
+</blockquote>
+<blockquote>
+<p>RPN的输出：RoIs（形如2000×4或者300×4的tensor）</p>
+</blockquote>
+<h3 id="3-5-对RPN的理解"><a href="#3-5-对RPN的理解" class="headerlink" title="3.5 对RPN的理解"></a>3.5 对RPN的理解</h3><blockquote>
+<p>RPN实际上延续了基于滑动窗进行目标定位的思路，不同之处在于候选区域网络在卷积特征而不是在原图上进行滑动。由于这是非常高层的feature map，其本身size就不大且感受野很大，因此即使使用3×3的滑动窗，也能对应于很大的原图区域。</p>
+</blockquote>
+<blockquote>
+<p>RPN目的是进行候选框的选择，输出候选框的概率值和位置坐标；分类部分可看成是一个二分类网络，目的是分开前景（不包含有ROI的部分）和背景（包含有ROI的部分）。</p>
+</blockquote>
+<blockquote>
+<p>在最后的卷积层上，通过两层卷积(3×3和1×1卷积)，输出两个分支。其中，一个分支用于判断每个锚盒是否包含了目标，另一个分支对每个锚盒输出候选区域的4个坐标。</p>
+</blockquote>
+<blockquote>
+<p>全卷积网络，不需要输入图像resize到固定尺寸；</p>
+</blockquote>
+<h2 id="4-Fast-R-CNN-也可叫RoIHead"><a href="#4-Fast-R-CNN-也可叫RoIHead" class="headerlink" title="4. Fast R-CNN(也可叫RoIHead)"></a>4. Fast R-CNN(也可叫RoIHead)</h2><p>RPN只是给出了2000个候选框，RoI Head在给出的2000候选框之上继续进行分类和位置参数的回归。</p>
+<h3 id="4-1-网络结构"><a href="#4-1-网络结构" class="headerlink" title="4.1 网络结构"></a>4.1 网络结构</h3><p><img src="http://wx3.sinaimg.cn/large/b41e0ba9ly1ftd9jfd6maj20e40l87an.jpg" alt="image"></p>
+<p>最后两个全连接层，分别是：</p>
+<ul>
+<li>FC 21 用来分类，预测RoIs属于哪个类别（20个类+背景）</li>
+<li>FC 84 用来回归位置（21个类，每个类都有4个位置参数）</li>
+</ul>
+<h3 id="4-2-训练"><a href="#4-2-训练" class="headerlink" title="4.2 训练"></a>4.2 训练</h3><p>由于RoIs给出的2000个候选框，分别对应feature map不同大小的区域，挑选出top-N个（如128个）ROIs来训练Fast R-CNN，选择规则如下：</p>
+<ul>
+<li>RoIs和gt_bboxes 的IoU大于0.5的，选择一些（比如32个）</li>
+<li>选择 RoIs和gt_bboxes的IoU小于等于0（或者0.1）的选择一些（比如 128-32=96个）作为负样本</li>
+</ul>
+<h2 id="5-RPN与Fast-R-CNN共享卷积该如何训练？"><a href="#5-RPN与Fast-R-CNN共享卷积该如何训练？" class="headerlink" title="5. RPN与Fast R-CNN共享卷积该如何训练？"></a>5. RPN与Fast R-CNN共享卷积该如何训练？</h2><ol>
+<li>第一步：用ImageNet模型初始化，独立训练一个RPN网络；</li>
+<li>第二步：仍然用ImageNet模型初始化，但是使用上一步RPN网络产生的proposal作为输入，训练一个Fast-RCNN网络，至此，两个网络每一层的参数完全不共享；</li>
+<li>第三步：使用第二步的Fast-RCNN网络参数初始化一个新的RPN网络（即将r-cnn卷积层部分的权重作为RPN网络卷基层的初始化权重），但是把RPN、Fast-RCNN共享的那些卷积层的learning rate设置为0，也就是不更新，仅仅更新RPN特有的那些网络层，重新训练，此时，两个网络已经共享了所有公共的卷积层；</li>
+<li>第四步：仍然固定共享的那些网络层，把Fast-RCNN特有的网络层也加入进来，形成一个unified network，继续训练，fine tune Fast-RCNN特有的网络层，此时，该网络已经实现我们设想的目标，即网络内部预测proposal并实现检测的功能。</li>
+</ol>
+<p><img src="http://ws2.sinaimg.cn/large/b41e0ba9ly1ftd8rmvaouj20zl0g2n3q.jpg" alt="image"></p>
+<h2 id="6-总的模型inference"><a href="#6-总的模型inference" class="headerlink" title="6. 总的模型inference"></a>6. 总的模型inference</h2><p>测试的时候对所有的RoIs（大概300个左右) 计算概率，并利用位置参数调整预测候选框的位置。然后再用一遍极大值抑制（之前在RPN中生成proposals就用过）。</p>
+<p>注意：</p>
+<ul>
+<li>在RPN的时候，已经对anchor做了一遍NMS，在RCNN测试的时候，还要再做一遍</li>
+<li>在RPN的时候，已经对anchor的位置做了回归调整，在RCNN阶段还要对RoI再做一遍</li>
+<li>在RPN阶段分类是二分类，而Fast RCNN阶段是21分类</li>
+</ul>
+<h2 id="6-Ablation-experiment（对比实验）"><a href="#6-Ablation-experiment（对比实验）" class="headerlink" title="6. Ablation experiment（对比实验）"></a>6. Ablation experiment（对比实验）</h2><blockquote>
+<p>Ablation experiment就是用来研究整个流程里面的关键部分到底起了多大作用，就像Faster R-CNN中将RPN换成SS进行对比实验，以及与不共享主干网络进行对比</p>
+</blockquote>
+<p>对比研究Fast R-CNN中的检测框回归层（reg）和检测框分类层（cls）的影响：</p>
+<ol>
+<li>移除cls层，我们从没有计算得分的区域随机抽取N个proposals</li>
+</ol>
+<blockquote>
+<p>结论：cls得分是排名最高的proposals准确的原因</p>
+</blockquote>
+<ol start="2">
+<li>移除reg层（这样的proposals就直接是anchor框了）</li>
+</ol>
+<blockquote>
+<p>结论：高品质的proposals主要归功于回归后的位置，单是anchor框不足以精确检测</p>
+</blockquote>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+</article>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/luqiang6q" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="https://weibo.com/6Qiang/profile?rightmod=1&wvr=6&mod=personinfo" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="http://bbs.ustc.edu.cn/cgi/bbsdoc?board=Intern" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/04/26/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E6%80%BB%E7%BB%93-R-CNN%E7%B3%BB%E5%88%97/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            R-CNN系列总结
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/04/22/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/YOLOv2/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">YOLOv2</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+<div class="widget-wrap widget-list">
+    <h3 class="widget-title">目录</h3>
+    <div class="widget">
+        <div id="toc" class="toc-article">
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%8F%82%E8%80%83"><span class="toc-number">1.</span> <span class="toc-text">0. 参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AE%BA%E6%96%87%E6%A6%82%E5%86%B5"><span class="toc-number">2.</span> <span class="toc-text">1. 论文概况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%95%B4%E4%BD%93%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">2. 整体算法流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-RPN"><span class="toc-number">4.</span> <span class="toc-text">3. RPN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-RPN%E6%95%B4%E4%BD%93%E6%80%9D%E8%B7%AF"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 RPN整体思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-RPN%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 RPN算法流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%80%99%E9%80%89%E5%8C%BA%E5%9F%9F%EF%BC%88anchors%EF%BC%89%E4%BD%8D%E7%BD%AE%E8%AE%A1%E7%AE%97"><span class="toc-number">4.3.</span> <span class="toc-text">3.3 候选区域（anchors）位置计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-RPN%E8%AE%AD%E7%BB%83"><span class="toc-number">4.4.</span> <span class="toc-text">3.4 RPN训练</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-%E8%AE%AD%E7%BB%83%E6%96%B9%E6%B3%95%EF%BC%9AFast-R-CNN%E4%B8%AD%E7%9A%84image-centric%E9%87%87%E6%A0%B7%E7%AD%96%E7%95%A5"><span class="toc-number">4.4.1.</span> <span class="toc-text">3.4.1 训练方法：Fast R-CNN中的image-centric采样策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-loss%E5%87%BD%E6%95%B0"><span class="toc-number">4.4.2.</span> <span class="toc-text">3.4.2 loss函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-3-RPN%E7%9A%84inference%EF%BC%9A%E7%94%9F%E6%88%90ROIs"><span class="toc-number">4.5.</span> <span class="toc-text">3.4.3 RPN的inference：生成ROIs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%AF%B9RPN%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">4.6.</span> <span class="toc-text">3.5 对RPN的理解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Fast-R-CNN-%E4%B9%9F%E5%8F%AF%E5%8F%ABRoIHead"><span class="toc-number">5.</span> <span class="toc-text">4. Fast R-CNN(也可叫RoIHead)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="toc-number">5.1.</span> <span class="toc-text">4.1 网络结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%AE%AD%E7%BB%83"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 训练</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-RPN%E4%B8%8EFast-R-CNN%E5%85%B1%E4%BA%AB%E5%8D%B7%E7%A7%AF%E8%AF%A5%E5%A6%82%E4%BD%95%E8%AE%AD%E7%BB%83%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">5. RPN与Fast R-CNN共享卷积该如何训练？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%80%BB%E7%9A%84%E6%A8%A1%E5%9E%8Binference"><span class="toc-number">7.</span> <span class="toc-text">6. 总的模型inference</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Ablation-experiment%EF%BC%88%E5%AF%B9%E6%AF%94%E5%AE%9E%E9%AA%8C%EF%BC%89"><span class="toc-number">8.</span> <span class="toc-text">6. Ablation experiment（对比实验）</span></a></li></ol>
+        </div>
+    </div>
+</div>
+
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8E%E7%AC%94%E5%B0%96%E6%A3%80%E6%B5%8B%E7%9A%84%E6%89%8B%E5%86%99%E6%A8%A1%E4%BB%BF%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9e25fxhgj20hs0dcwlp.jpg)" alt="基于笔尖检测的手写模仿机器人" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8E%E7%AC%94%E5%B0%96%E6%A3%80%E6%B5%8B%E7%9A%84%E6%89%8B%E5%86%99%E6%A8%A1%E4%BB%BF%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="title">基于笔尖检测的手写模仿机器人</a></p>
+                            <p class="item-date"><time datetime="2018-07-26T11:48:32.000Z" itemprop="datePublished">2018-07-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EGRNN%E5%92%8CGBDT%E7%9A%84%E5%A7%BF%E6%80%81%E8%AF%AF%E5%B7%AE%E8%A1%A5%E5%81%BF/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ws4.sinaimg.cn/large/b41e0ba9ly1fuise6vwjgj20bc06ewj5.jpg)" alt="基于GRNN和GBDT的姿态误差补偿" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/26/%E9%A1%B9%E7%9B%AE/%E5%9F%BA%E4%BA%8EGRNN%E5%92%8CGBDT%E7%9A%84%E5%A7%BF%E6%80%81%E8%AF%AF%E5%B7%AE%E8%A1%A5%E5%81%BF/" class="title">基于GRNN和GBDT的姿态误差补偿</a></p>
+                            <p class="item-date"><time datetime="2018-07-26T01:48:32.000Z" itemprop="datePublished">2018-07-26</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/25/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ws3.sinaimg.cn/large/b41e0ba9ly1fu9bfbd720j20i90d70u7.jpg)" alt="验证码识别" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/25/%E9%A1%B9%E7%9B%AE/%E9%AA%8C%E8%AF%81%E7%A0%81%E8%AF%86%E5%88%AB/" class="title">验证码识别</a></p>
+                            <p class="item-date"><time datetime="2018-07-25T10:23:46.000Z" itemprop="datePublished">2018-07-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/24/%E9%A1%B9%E7%9B%AE/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E9%97%A8%E7%89%8C%E5%8F%B7%E8%AF%86%E5%88%AB/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu9a1gwko4j20dw0af44l.jpg)" alt="实验室门牌号识别" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/24/%E9%A1%B9%E7%9B%AE/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E9%97%A8%E7%89%8C%E5%8F%B7%E8%AF%86%E5%88%AB/" class="title">实验室门牌号识别</a></p>
+                            <p class="item-date"><time datetime="2018-07-24T10:28:35.000Z" itemprop="datePublished">2018-07-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://ww1.sinaimg.cn/large/b41e0ba9ly1fu996rbjw5j20hv0e9qak.jpg)" alt="大符目标检测-2016大疆Robomasters比赛" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></p>
+                            <p class="item-title"><a href="/2018/07/23/%E9%A1%B9%E7%9B%AE/%E5%A4%A7%E7%AC%A6%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-2016%E5%A4%A7%E7%96%86Robomasters%E6%AF%94%E8%B5%9B/" class="title">大符目标检测-2016大疆Robomasters比赛</a></p>
+                            <p class="item-date"><time datetime="2018-07-23T06:42:20.000Z" itemprop="datePublished">2018-07-23</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CNN/">CNN</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Github/">Github</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenCV/">OpenCV</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/">模型优化</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a><span class="category-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">12</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CNN/" style="font-size: 17.14px;">CNN</a> <a href="/tags/Github/" style="font-size: 11.43px;">Github</a> <a href="/tags/OpenCV/" style="font-size: 14.29px;">OpenCV</a> <a href="/tags/Python/" style="font-size: 18.57px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 12.86px;">TensorFlow</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据处理</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">机器学习</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E4%BC%98%E5%8C%96/" style="font-size: 11.43px;">模型优化</a> <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" style="font-size: 18.57px;">目标检测</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 15.71px;">项目</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://blog.csdn.net/luqiang6q">CSDN</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 陆强</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://example.com/2018/04/25/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/Faster%20R-CNN/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
